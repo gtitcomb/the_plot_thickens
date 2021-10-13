@@ -1,7 +1,7 @@
-name: "YOURNAME"                                # CHANGE HERE 
+name: "Georgia"                              
 output_dir: "."
 navbar:
-  title: "YOURNAME"                             # CHANGE HERE 
+  title: "Georgia"                             
   type: inverse
   left:
     - text: "Home"
@@ -10,19 +10,14 @@ navbar:
     - text: "About"
       icon: fa-user 
       href: about.html
-    - text: "CV"
+    - text: "Circle"
       icon: fa-file-pdf-o
-      href: cv.html
-    - text: "Blog"
-      icon: fa-rss
-      href: https://YOURGITHUB.github.io/blog/  # CHANGE HERE OR DELETE ALL 3 LINES 
+      href: Code_for_Circular_plots_demo.html
+
   right:
-    - text: "Contact me"
-      icon: fa-envelope-o
-      href: mailto:YOUREMAIL                    # CHANGE HERE 
     - text: "GitHub"
       icon: fa-github
-      href: https://github.com/YOURGITHUB       # CHANGE HERE 
+      href: https://github.com/gtitcomb/the_plot_thickens      
 output:
   html_document:
     theme: cosmo
