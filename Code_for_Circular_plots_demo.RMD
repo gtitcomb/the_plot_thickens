@@ -1,9 +1,8 @@
 ---
-title: "Plots for Lab Meeting"
-author: "Georgia Titcomb"
-date: "May 6, 2021"
+title: "Circular Plots"
 output: html_document
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
