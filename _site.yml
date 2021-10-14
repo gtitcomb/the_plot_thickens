@@ -11,7 +11,7 @@ navbar:
       icon: fa-user 
       href: about.html
     - text: "Plots"
-      icon: fa-file-pdf-o
+      icon: fa-chart-scatter
       href: Code_for_Circular_plots_demo.html
 
   right:
