@@ -1,7 +1,7 @@
 ---
-title: "About me"
+title: "About"
 ---
 
-## Header
+## This site is in progress! 
 
-Say more about you here.
+Check back as we add more tips and tricks!
