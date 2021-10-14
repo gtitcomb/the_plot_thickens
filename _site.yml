@@ -1,7 +1,7 @@
-name: "Georgia"                              
+name: "the plot thickens"                              
 output_dir: "."
 navbar:
-  title: "Georgia"                             
+  title: "the plot thickens"                             
   type: inverse
   left:
     - text: "Home"
@@ -10,7 +10,7 @@ navbar:
     - text: "About"
       icon: fa-user 
       href: about.html
-    - text: "Circle"
+    - text: "Plots"
       icon: fa-file-pdf-o
       href: Code_for_Circular_plots_demo.html
 
