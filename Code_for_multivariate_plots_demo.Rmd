@@ -247,10 +247,11 @@ And just because we can, let's play with the fonts.
 You can check out the fonts installed on your (Windows) system using:
 ```{r}
 
-windowsFonts()
+#windowsFonts()
 
 ```
-This isn't exactly a huge array of options.
+
+This usually doesn't return a huge array of options.
 But we can use the extrafont package to have access to some more:
 
 ```{r}
