@@ -1,0 +1,291 @@
+---
+title: "Multivariate"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    smooth_scroll: true
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+### Ordinations
+
+Many ecological analyses involve some sort of multivariate measurement of "species" within "sites". For example, this might include counts of plant species along a sampling transect, relative sequencing abundance of bacterial species within a host gut, or chemical composition of soils. 
+
+The vegan package in R provides excellent tutorials and resources for conducting the appropriate analyses for a given multivariate problem. Here, we will simply explore different ways of visualizing these outputs.
+
+Let's start by simulating some data.
+
+I'm a (very) amateur baker (read: I like to eat sweet things, but I don't have a clue about how/why baking recipes work), so I collected some data about baking ratios for several common desserts:
+
+```{r}
+# create the data frame
+desserts = data.frame(dessert = c("pound_cake","pancakes","meringue","choux_pastry","pie","fritter", "cookie","custard","biscuit", "crepe","muffin"),
+           flour = c(2,1,2,0,1,3,2,3,3,0.5,2), sugar = c(1,0,2,0,0,0,1,0,0,0,0),
+           eggs = c(1,1,1,2,0,1,0,2,0,1,1), fat = c(1,0.5,0,1,2,0,2,0,1,0,1),
+           liquid = c(0,2,0,2,1,2,0,1,2,1,2))
+```
+
+Now we will visualize these data using NMDS (Non-metric multidimensional scaling). We could also use a number of other multivariate methods (e.g. PCA, rda, dbrda, cca). A lot of ecological datasets violate assumptions of normality and often NMDS is a pretty robust method; therefore, we will work through this example using the metaMDS function in the vegan package.
+
+```{r}
+# load vegan library
+library(vegan)
+
+# run NMDS
+desord = metaMDS(desserts[,-1])
+```
+
+
+Unfortunately, the basic vegan plotting function doesn't make a particularly compelling plot:
+
+```{r}
+plot(desord)
+```
+
+
+Not to fear! We can extract these data and make our own ggplot2-based plot.
+
+```{r}
+# create dataframe using information stored as points in the NMDS object
+dessert_data = data.frame(NMDS1 = desord$points[,1], NMDS2= desord$points[,2],
+                          dessert = desserts$dessert)
+
+head(dessert_data)
+
+# create dataframe of ingredient information using the 'species' scores 
+ingredient_data = as.data.frame(scores(desord, "species"))
+ingredient_data$ingredient = row.names(ingredient_data)
+
+head(ingredient_data)
+```
+
+
+Now we can make a plot:
+
+```{r}
+# First, let's visualize the desserts in 2-D space
+ggplot(dessert_data, aes(x=NMDS1, y=NMDS2))+
+  geom_point(aes(col=dessert))+
+  geom_text(aes(label=dessert, col=dessert), nudge_y = -0.025)+
+    theme_bw(base_size=14)
+
+```
+
+
+It's a bit annoying that some of our labels are not entirely visible. One easy solution is to use the ggrepel package:
+
+```{r}
+
+library(ggrepel)
+
+ggplot(dessert_data, aes(x=NMDS1, y=NMDS2))+
+  geom_point(aes(col=dessert))+
+  geom_text_repel(aes(label=dessert, col=dessert))+
+    theme_bw(base_size=14)
+
+```
+
+
+Let's say that we want to get really fancy and substitute icons for each of our points. R has several different shapes that we could use, but none of them are particularly representative of our desserts. However, we can take advantage of a) emojis or b) MAKING OUR OWN ICONS!!!
+
+
+First, let's install the emo package
+```{r}
+
+#remotes::install_github("hadley/emo")
+library(emo)
+
+```
+
+This is a pretty cool package that will retrieve color emojis given a keyword.
+For example:
+
+```{r}
+
+ji("cake")
+
+```
+
+If we want to see all the emojis, we can access the ji_keyword object
+
+```{r}
+
+head(summary(ji_keyword))
+dim(summary(ji_keyword)) # there are over 5000 keywords
+
+```
+
+Let's see if we can find some good emojis for our desserts
+
+```{r eval=FALSE, include=TRUE}
+
+ji("cake")
+ji("cloud") # for meringue
+ji("custard")
+ji("pancake")
+ji("pie")
+ji("cupcake") # for muffin
+ji("cookie")
+ji("bread") # for choux
+ji("hotdog") # for fritter
+ji("circle") # for crepe
+ji("moon_cake") # for biscuit
+ji("doughnut") # for pound cake
+
+
+```
+Now we can map these to values
+
+```{r}
+
+library(purrr)
+library(dplyr)
+
+# create a new column with our substitue names
+dessert_data = dessert_data %>% 
+  mutate(dessert_id2 = dessert) %>% 
+  mutate(dessert_id2 = recode(dessert_id2, meringue="cloud", muffin="cupcake",
+                              fritter="hotdog", crepe="circle", biscuit="moon_cake", pound_cake="doughnut", choux_pastry="bread")) %>% 
+  mutate(emoji = map_chr(dessert_id2, ji))
+
+head(dessert_data)
+
+ggplot(dessert_data, aes(x = NMDS1, y = NMDS2))+
+  geom_text(aes(label=emoji, col=emoji))+
+  geom_text_repel(aes(label=dessert))+
+  guides(col="none")+
+  theme_bw()
+
+```
+
+Hooray!
+
+So obviously, not all of these are perfect substitutes. What if we could substitute in our OWN icons? WHAT?
+
+To do this, we can take advantage of the ggimage package:
+
+```{r}
+library(ggimage)
+
+```
+
+We now need to find some images to use!
+I created a folder (named "baking_pics") to store my images.
+
+```{r}
+# store file paths to images
+images = list.files("baking_pics/")
+images = paste("baking_pics/", images, sep="")
+
+# substitute the image file in the dessert data frame
+dessert_data = dessert_data %>% 
+  mutate(picture = NA)
+dessert_data$picture[grep("crepe",dessert_data$dessert)] = "baking_pics/crepe.png"
+dessert_data$picture[grep("fritter",dessert_data$dessert)] = "baking_pics/fritter.png"
+dessert_data$picture[grep("choux_pastry",dessert_data$dessert)] = "baking_pics/eclair.png"
+dessert_data$picture[grep("pound_cake",dessert_data$dessert)] = "baking_pics/poundcake.png"
+dessert_data$picture[grep("meringue",dessert_data$dessert)] = "baking_pics/meringue.png"
+dessert_data$picture[grep("muffin",dessert_data$dessert)] = "baking_pics/muffin.png"
+
+```
+
+Before plotting the emojis and pictures together, let's now mutate the bad/fake emojis to NA:
+
+```{r message=FALSE, warning=FALSE}
+
+dessert_data = dessert_data %>% 
+  mutate_at(vars(emoji), funs(ifelse(is.na(picture), ., NA)))
+
+```
+
+
+Now let's plot them together!
+
+```{r message=FALSE, warning=FALSE}
+
+ggplot(dessert_data, aes(x=NMDS1, y=NMDS2))+
+  geom_image(aes(image = picture),size=0.1)+
+  geom_text_repel(aes(label = emoji, col=emoji), size=12)+
+  guides(col="none")+
+  theme_bw()
+
+```
+
+Alright!
+
+Granted, this does look heinous, but if you are a talented artist, you can see how this method is great for automatically adding your own artwork to figures so that you don't have to futz around in powerpoint or illustrator :)
+
+The last step that I'll cover is adding the ingredient information to plot.
+
+```{r}
+
+head(ingredient_data)
+
+```
+
+We can do this by simply adding another layer to the plot:
+
+```{r, message=F, warning=FALSE}
+
+ggplot(dessert_data, aes(x=NMDS1, y=NMDS2))+
+  geom_image(aes(image = picture),size=0.1)+
+  geom_text_repel(aes(label = emoji, col=emoji), size=12)+
+  geom_text_repel(data=ingredient_data, aes(x=NMDS1, y=NMDS2, label=ingredient))+
+  guides(col="none")+
+  theme_bw()
+
+```
+
+And just because we can, let's play with the fonts.
+
+You can check out the fonts installed on your (Windows) system using:
+```{r}
+
+windowsFonts()
+
+```
+This isn't exactly a huge array of options.
+But we can use the extrafont package to have access to some more:
+
+```{r}
+
+# install this dependency before loading the package
+#remotes::install_version("Rttf2pt1", version = "1.3.8")
+
+library(extrafont)
+
+# need to import and load the fonts - this will take a few minutes but only has to be done once
+#font_import()
+#loadfonts(device="win")
+
+head(windowsFonts())
+# hooray! fonts!
+```
+Let's pick some zany fonts for our ingredients
+
+```{r, message=FALSE, warning=F}
+
+# make a vector
+font_vec = c("Papyrus", "Jokerman", "Bauhaus 93", "Goudy Stout",  "Blackadder ITC")
+
+ggplot(dessert_data, aes(x=NMDS1, y=NMDS2))+
+  geom_image(aes(image = picture),size=0.1)+
+  geom_text_repel(aes(label = emoji, col=emoji), size=12)+
+  geom_text_repel(data=ingredient_data, aes(x=NMDS1, y=NMDS2, label=ingredient,
+                                            family=font_vec))+
+  guides(col="none")+
+  theme_bw()
+
+
+```
+
+
+Yes, that's right, I used Papyrus.
+
+![](https://media.giphy.com/media/l1J9NQvtuCQzUbH2g/giphy-downsized-large.gif)
