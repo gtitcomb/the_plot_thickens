@@ -2,4 +2,6 @@
 title: "Welcome!"
 ---
 
-This site is in progress -- check back for updates!
+This site is a work in progress, so be sure to check back for updates!
+
+![](https://media.giphy.com/media/gkR94v1ok56OAkg8o1/giphy.gif)
