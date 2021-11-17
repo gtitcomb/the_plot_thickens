@@ -10,9 +10,12 @@ navbar:
     - text: "About"
       icon: fa-user 
       href: about.html
-    - text: "Plots"
-      icon: fa-chart-scatter
+    - text: "Time"
+      icon: fa-clock
       href: Code_for_Circular_plots_demo.html
+    - text: "Multivariate"
+      icon: fa-chart-scatter
+      href: Code_for_multivariate_plots_demo.html
 
   right:
     - text: "GitHub"
