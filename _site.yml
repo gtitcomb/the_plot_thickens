@@ -14,7 +14,7 @@ navbar:
       icon: fa-clock
       href: Code_for_Circular_plots_demo.html
     - text: "Multivariate"
-      icon: fa-clock
+      icon: fa-cubes
       href: Code_for_multivariate_plots_demo.html
 
   right:
