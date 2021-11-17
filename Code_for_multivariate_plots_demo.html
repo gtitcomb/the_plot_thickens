@@ -339,9 +339,16 @@ div.tocify {
 </li>
 <li>
   <a href="Code_for_Circular_plots_demo.html">
+    <span class="fa fa-clock"></span>
+     
+    Time
+  </a>
+</li>
+<li>
+  <a href="Code_for_multivariate_plots_demo.html">
     <span class="fa fa-chart-scatter"></span>
      
-    Plots
+    Multivariate
   </a>
 </li>
       </ul>
@@ -388,52 +395,43 @@ desserts = data.frame(dessert = c(&quot;pound_cake&quot;,&quot;pancakes&quot;,&q
            liquid = c(0,2,0,2,1,2,0,1,2,1,2))</code></pre>
 <p>Now we will visualize these data using NMDS (Non-metric multidimensional scaling). We could also use a number of other multivariate methods (e.g. PCA, rda, dbrda, cca). A lot of ecological datasets violate assumptions of normality and often NMDS is a pretty robust method; therefore, we will work through this example using the metaMDS function in the vegan package.</p>
 <pre class="r"><code># load vegan library
-library(vegan)</code></pre>
-<pre><code>## Loading required package: permute</code></pre>
-<pre><code>## Loading required package: lattice</code></pre>
-<pre><code>## This is vegan 2.5-7</code></pre>
-<pre class="r"><code># run NMDS
+library(vegan)
+
+# run NMDS
 desord = metaMDS(desserts[,-1])</code></pre>
 <pre><code>## Run 0 stress 0.1036346 
-## Run 1 stress 0.1036346 
-## ... New best solution
-## ... Procrustes: rmse 3.580872e-05  max resid 7.009258e-05 
+## Run 1 stress 0.1318933 
+## Run 2 stress 0.1036346 
+## ... Procrustes: rmse 3.455718e-05  max resid 6.639791e-05 
 ## ... Similar to previous best
-## Run 2 stress 0.1193745 
-## Run 3 stress 0.1036346 
-## ... Procrustes: rmse 5.946829e-05  max resid 0.0001177734 
-## ... Similar to previous best
-## Run 4 stress 0.1318933 
-## Run 5 stress 0.1193745 
-## Run 6 stress 0.1599094 
-## Run 7 stress 0.1036346 
-## ... Procrustes: rmse 9.216428e-05  max resid 0.0001842634 
-## ... Similar to previous best
-## Run 8 stress 0.1383341 
+## Run 3 stress 0.1318933 
+## Run 4 stress 0.1948429 
+## Run 5 stress 0.1383341 
+## Run 6 stress 0.1318933 
+## Run 7 stress 0.1318933 
+## Run 8 stress 0.1643134 
 ## Run 9 stress 0.1193745 
 ## Run 10 stress 0.1036346 
-## ... Procrustes: rmse 3.839534e-05  max resid 7.770407e-05 
+## ... New best solution
+## ... Procrustes: rmse 2.585378e-05  max resid 5.03233e-05 
 ## ... Similar to previous best
 ## Run 11 stress 0.1383341 
-## Run 12 stress 0.1560745 
-## Run 13 stress 0.1036346 
-## ... Procrustes: rmse 0.0001344272  max resid 0.0002726295 
+## Run 12 stress 0.1193745 
+## Run 13 stress 0.1318933 
+## Run 14 stress 0.1193745 
+## Run 15 stress 0.1036347 
+## ... Procrustes: rmse 0.0002251529  max resid 0.000456316 
 ## ... Similar to previous best
-## Run 14 stress 0.1036346 
-## ... Procrustes: rmse 0.0001236132  max resid 0.0002436693 
+## Run 16 stress 0.1036346 
+## ... New best solution
+## ... Procrustes: rmse 2.384381e-05  max resid 4.456807e-05 
 ## ... Similar to previous best
-## Run 15 stress 0.1036346 
-## ... Procrustes: rmse 1.391894e-05  max resid 2.509266e-05 
+## Run 17 stress 0.1036346 
+## ... Procrustes: rmse 2.244196e-05  max resid 4.537804e-05 
 ## ... Similar to previous best
-## Run 16 stress 0.1193745 
-## Run 17 stress 0.1193745 
-## Run 18 stress 0.1036346 
-## ... Procrustes: rmse 8.234547e-05  max resid 0.0001663147 
-## ... Similar to previous best
-## Run 19 stress 0.1598419 
-## Run 20 stress 0.1036346 
-## ... Procrustes: rmse 3.878945e-05  max resid 7.715437e-05 
-## ... Similar to previous best
+## Run 18 stress 0.1383341 
+## Run 19 stress 0.1193745 
+## Run 20 stress 0.1560746 
 ## *** Solution reached</code></pre>
 <p>Unfortunately, the basic vegan plotting function doesn’t make a particularly compelling plot:</p>
 <pre class="r"><code>plot(desord)</code></pre>
@@ -445,23 +443,23 @@ dessert_data = data.frame(NMDS1 = desord$points[,1], NMDS2= desord$points[,2],
 
 head(dessert_data)</code></pre>
 <pre><code>##         NMDS1      NMDS2      dessert
-## 1 -0.48446693  0.1261391   pound_cake
-## 2  0.36064411 -0.1194710     pancakes
-## 3 -0.60832591  0.5136994     meringue
-## 4  0.75159220 -0.2512947 choux_pastry
-## 5 -0.06595866 -0.7494333          pie
-## 6  0.10415200  0.2649768      fritter</code></pre>
+## 1 -0.48445785  0.1261839   pound_cake
+## 2  0.36062034 -0.1195250     pancakes
+## 3 -0.60828528  0.5137362     meringue
+## 4  0.75159677 -0.2512641 choux_pastry
+## 5 -0.06597907 -0.7494481          pie
+## 6  0.10418106  0.2649430      fritter</code></pre>
 <pre class="r"><code># create dataframe of ingredient information using the &#39;species&#39; scores 
 ingredient_data = as.data.frame(scores(desord, &quot;species&quot;))
 ingredient_data$ingredient = row.names(ingredient_data)
 
 head(ingredient_data)</code></pre>
 <pre><code>##             NMDS1      NMDS2 ingredient
-## flour  -0.2288883  0.1283689      flour
-## sugar  -1.1138754  0.4865735      sugar
-## eggs    0.3352001  0.3436292       eggs
-## fat    -0.2236532 -0.7130539        fat
-## liquid  0.4657506 -0.1422652     liquid</code></pre>
+## flour  -0.2288884  0.1283640      flour
+## sugar  -1.1138420  0.4866583      sugar
+## eggs    0.3352246  0.3436221       eggs
+## fat    -0.2236820 -0.7130215        fat
+## liquid  0.4657376 -0.1422987     liquid</code></pre>
 <p>Now we can make a plot:</p>
 <pre class="r"><code># First, let&#39;s visualize the desserts in 2-D space
 ggplot(dessert_data, aes(x=NMDS1, y=NMDS2))+
@@ -510,16 +508,9 @@ ji(&quot;moon_cake&quot;) # for biscuit
 ji(&quot;doughnut&quot;) # for pound cake</code></pre>
 <p>Now we can map these to values</p>
 <pre class="r"><code>library(purrr)
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code># create a new column with our substitue names
+library(dplyr)
+
+# create a new column with our substitue names
 dessert_data = dessert_data %&gt;% 
   mutate(dessert_id2 = dessert) %&gt;% 
   mutate(dessert_id2 = recode(dessert_id2, meringue=&quot;cloud&quot;, muffin=&quot;cupcake&quot;,
@@ -528,12 +519,12 @@ dessert_data = dessert_data %&gt;%
 
 head(dessert_data)</code></pre>
 <pre><code>##         NMDS1      NMDS2      dessert dessert_id2            emoji
-## 1 -0.48446693  0.1261391   pound_cake    doughnut     &lt;U+0001F369&gt;
-## 2  0.36064411 -0.1194710     pancakes    pancakes     &lt;U+0001F95E&gt;
-## 3 -0.60832591  0.5136994     meringue       cloud &lt;U+2601&gt;&lt;U+FE0F&gt;
-## 4  0.75159220 -0.2512947 choux_pastry       bread     &lt;U+0001F35E&gt;
-## 5 -0.06595866 -0.7494333          pie         pie     &lt;U+0001F967&gt;
-## 6  0.10415200  0.2649768      fritter      hotdog     &lt;U+0001F32D&gt;</code></pre>
+## 1 -0.48445785  0.1261839   pound_cake    doughnut     &lt;U+0001F369&gt;
+## 2  0.36062034 -0.1195250     pancakes    pancakes     &lt;U+0001F95E&gt;
+## 3 -0.60828528  0.5137362     meringue       cloud &lt;U+2601&gt;&lt;U+FE0F&gt;
+## 4  0.75159677 -0.2512641 choux_pastry       bread     &lt;U+0001F35E&gt;
+## 5 -0.06597907 -0.7494481          pie         pie     &lt;U+0001F967&gt;
+## 6  0.10418106  0.2649430      fritter      hotdog     &lt;U+0001F32D&gt;</code></pre>
 <pre class="r"><code>ggplot(dessert_data, aes(x = NMDS1, y = NMDS2))+
   geom_text(aes(label=emoji, col=emoji))+
   geom_text_repel(aes(label=dessert))+
@@ -573,11 +564,11 @@ dessert_data$picture[grep(&quot;muffin&quot;,dessert_data$dessert)] = &quot;baki
 <p>The last step that I’ll cover is adding the ingredient information to plot.</p>
 <pre class="r"><code>head(ingredient_data)</code></pre>
 <pre><code>##             NMDS1      NMDS2 ingredient
-## flour  -0.2288883  0.1283689      flour
-## sugar  -1.1138754  0.4865735      sugar
-## eggs    0.3352001  0.3436292       eggs
-## fat    -0.2236532 -0.7130539        fat
-## liquid  0.4657506 -0.1422652     liquid</code></pre>
+## flour  -0.2288884  0.1283640      flour
+## sugar  -1.1138420  0.4866583      sugar
+## eggs    0.3352246  0.3436221       eggs
+## fat    -0.2236820 -0.7130215        fat
+## liquid  0.4657376 -0.1422987     liquid</code></pre>
 <p>We can do this by simply adding another layer to the plot:</p>
 <pre class="r"><code>ggplot(dessert_data, aes(x=NMDS1, y=NMDS2))+
   geom_image(aes(image = picture),size=0.1)+
@@ -596,14 +587,578 @@ dessert_data$picture[grep(&quot;muffin&quot;,dessert_data$dessert)] = &quot;baki
 ## [1] &quot;TT Arial&quot;
 ## 
 ## $mono
-## [1] &quot;TT Courier New&quot;</code></pre>
+## [1] &quot;TT Courier New&quot;
+## 
+## $`Agency FB`
+## [1] &quot;Agency FB&quot;
+## 
+## $Algerian
+## [1] &quot;Algerian&quot;
+## 
+## $`Arial Black`
+## [1] &quot;Arial Black&quot;
+## 
+## $Arial
+## [1] &quot;Arial&quot;
+## 
+## $`Arial Narrow`
+## [1] &quot;Arial Narrow&quot;
+## 
+## $`Arial Rounded MT Bold`
+## [1] &quot;Arial Rounded MT Bold&quot;
+## 
+## $Bahnschrift
+## [1] &quot;Bahnschrift&quot;
+## 
+## $`Baskerville Old Face`
+## [1] &quot;Baskerville Old Face&quot;
+## 
+## $`Bauhaus 93`
+## [1] &quot;Bauhaus 93&quot;
+## 
+## $`Bell MT`
+## [1] &quot;Bell MT&quot;
+## 
+## $`Berlin Sans FB`
+## [1] &quot;Berlin Sans FB&quot;
+## 
+## $`Berlin Sans FB Demi`
+## [1] &quot;Berlin Sans FB Demi&quot;
+## 
+## $`Bernard MT Condensed`
+## [1] &quot;Bernard MT Condensed&quot;
+## 
+## $`Blackadder ITC`
+## [1] &quot;Blackadder ITC&quot;
+## 
+## $`Bodoni MT`
+## [1] &quot;Bodoni MT&quot;
+## 
+## $`Bodoni MT Black`
+## [1] &quot;Bodoni MT Black&quot;
+## 
+## $`Bodoni MT Condensed`
+## [1] &quot;Bodoni MT Condensed&quot;
+## 
+## $`Bodoni MT Poster Compressed`
+## [1] &quot;Bodoni MT Poster Compressed&quot;
+## 
+## $`Book Antiqua`
+## [1] &quot;Book Antiqua&quot;
+## 
+## $`Bookman Old Style`
+## [1] &quot;Bookman Old Style&quot;
+## 
+## $`Bookshelf Symbol 7`
+## [1] &quot;Bookshelf Symbol 7&quot;
+## 
+## $`Bradley Hand ITC`
+## [1] &quot;Bradley Hand ITC&quot;
+## 
+## $`Britannic Bold`
+## [1] &quot;Britannic Bold&quot;
+## 
+## $Broadway
+## [1] &quot;Broadway&quot;
+## 
+## $`Brush Script MT`
+## [1] &quot;Brush Script MT&quot;
+## 
+## $Calibri
+## [1] &quot;Calibri&quot;
+## 
+## $`Calibri Light`
+## [1] &quot;Calibri Light&quot;
+## 
+## $`Californian FB`
+## [1] &quot;Californian FB&quot;
+## 
+## $`Calisto MT`
+## [1] &quot;Calisto MT&quot;
+## 
+## $Cambria
+## [1] &quot;Cambria&quot;
+## 
+## $Candara
+## [1] &quot;Candara&quot;
+## 
+## $`Candara Light`
+## [1] &quot;Candara Light&quot;
+## 
+## $Castellar
+## [1] &quot;Castellar&quot;
+## 
+## $Centaur
+## [1] &quot;Centaur&quot;
+## 
+## $Century
+## [1] &quot;Century&quot;
+## 
+## $`Century Gothic`
+## [1] &quot;Century Gothic&quot;
+## 
+## $`Century Schoolbook`
+## [1] &quot;Century Schoolbook&quot;
+## 
+## $Chiller
+## [1] &quot;Chiller&quot;
+## 
+## $`Colonna MT`
+## [1] &quot;Colonna MT&quot;
+## 
+## $`Comic Sans MS`
+## [1] &quot;Comic Sans MS&quot;
+## 
+## $Consolas
+## [1] &quot;Consolas&quot;
+## 
+## $Constantia
+## [1] &quot;Constantia&quot;
+## 
+## $`Cooper Black`
+## [1] &quot;Cooper Black&quot;
+## 
+## $`Copperplate Gothic Bold`
+## [1] &quot;Copperplate Gothic Bold&quot;
+## 
+## $`Copperplate Gothic Light`
+## [1] &quot;Copperplate Gothic Light&quot;
+## 
+## $Corbel
+## [1] &quot;Corbel&quot;
+## 
+## $`Corbel Light`
+## [1] &quot;Corbel Light&quot;
+## 
+## $`Courier New`
+## [1] &quot;Courier New&quot;
+## 
+## $`Curlz MT`
+## [1] &quot;Curlz MT&quot;
+## 
+## $Dubai
+## [1] &quot;Dubai&quot;
+## 
+## $`Dubai Light`
+## [1] &quot;Dubai Light&quot;
+## 
+## $`Dubai Medium`
+## [1] &quot;Dubai Medium&quot;
+## 
+## $Ebrima
+## [1] &quot;Ebrima&quot;
+## 
+## $`Edwardian Script ITC`
+## [1] &quot;Edwardian Script ITC&quot;
+## 
+## $Elephant
+## [1] &quot;Elephant&quot;
+## 
+## $`Engravers MT`
+## [1] &quot;Engravers MT&quot;
+## 
+## $`Eras Bold ITC`
+## [1] &quot;Eras Bold ITC&quot;
+## 
+## $`Eras Demi ITC`
+## [1] &quot;Eras Demi ITC&quot;
+## 
+## $`Eras Light ITC`
+## [1] &quot;Eras Light ITC&quot;
+## 
+## $`Eras Medium ITC`
+## [1] &quot;Eras Medium ITC&quot;
+## 
+## $`Felix Titling`
+## [1] &quot;Felix Titling&quot;
+## 
+## $`Footlight MT Light`
+## [1] &quot;Footlight MT Light&quot;
+## 
+## $Forte
+## [1] &quot;Forte&quot;
+## 
+## $`Franklin Gothic Book`
+## [1] &quot;Franklin Gothic Book&quot;
+## 
+## $`Franklin Gothic Demi`
+## [1] &quot;Franklin Gothic Demi&quot;
+## 
+## $`Franklin Gothic Demi Cond`
+## [1] &quot;Franklin Gothic Demi Cond&quot;
+## 
+## $`Franklin Gothic Heavy`
+## [1] &quot;Franklin Gothic Heavy&quot;
+## 
+## $`Franklin Gothic Medium`
+## [1] &quot;Franklin Gothic Medium&quot;
+## 
+## $`Franklin Gothic Medium Cond`
+## [1] &quot;Franklin Gothic Medium Cond&quot;
+## 
+## $`Freestyle Script`
+## [1] &quot;Freestyle Script&quot;
+## 
+## $`French Script MT`
+## [1] &quot;French Script MT&quot;
+## 
+## $Gabriola
+## [1] &quot;Gabriola&quot;
+## 
+## $Gadugi
+## [1] &quot;Gadugi&quot;
+## 
+## $Garamond
+## [1] &quot;Garamond&quot;
+## 
+## $Georgia
+## [1] &quot;Georgia&quot;
+## 
+## $Gigi
+## [1] &quot;Gigi&quot;
+## 
+## $`Gill Sans Ultra Bold`
+## [1] &quot;Gill Sans Ultra Bold&quot;
+## 
+## $`Gill Sans Ultra Bold Condensed`
+## [1] &quot;Gill Sans Ultra Bold Condensed&quot;
+## 
+## $`Gill Sans MT`
+## [1] &quot;Gill Sans MT&quot;
+## 
+## $`Gill Sans MT Condensed`
+## [1] &quot;Gill Sans MT Condensed&quot;
+## 
+## $`Gill Sans MT Ext Condensed Bold`
+## [1] &quot;Gill Sans MT Ext Condensed Bold&quot;
+## 
+## $`Gloucester MT Extra Condensed`
+## [1] &quot;Gloucester MT Extra Condensed&quot;
+## 
+## $`Goudy Old Style`
+## [1] &quot;Goudy Old Style&quot;
+## 
+## $`Goudy Stout`
+## [1] &quot;Goudy Stout&quot;
+## 
+## $Haettenschweiler
+## [1] &quot;Haettenschweiler&quot;
+## 
+## $`Harlow Solid Italic`
+## [1] &quot;Harlow Solid Italic&quot;
+## 
+## $Harrington
+## [1] &quot;Harrington&quot;
+## 
+## $`High Tower Text`
+## [1] &quot;High Tower Text&quot;
+## 
+## $`HoloLens MDL2 Assets`
+## [1] &quot;HoloLens MDL2 Assets&quot;
+## 
+## $Impact
+## [1] &quot;Impact&quot;
+## 
+## $`Imprint MT Shadow`
+## [1] &quot;Imprint MT Shadow&quot;
+## 
+## $`Informal Roman`
+## [1] &quot;Informal Roman&quot;
+## 
+## $`Ink Free`
+## [1] &quot;Ink Free&quot;
+## 
+## $`Javanese Text`
+## [1] &quot;Javanese Text&quot;
+## 
+## $Jokerman
+## [1] &quot;Jokerman&quot;
+## 
+## $`Juice ITC`
+## [1] &quot;Juice ITC&quot;
+## 
+## $`Kristen ITC`
+## [1] &quot;Kristen ITC&quot;
+## 
+## $`Kunstler Script`
+## [1] &quot;Kunstler Script&quot;
+## 
+## $`Wide Latin`
+## [1] &quot;Wide Latin&quot;
+## 
+## $Leelawadee
+## [1] &quot;Leelawadee&quot;
+## 
+## $`Leelawadee UI`
+## [1] &quot;Leelawadee UI&quot;
+## 
+## $`Leelawadee UI Semilight`
+## [1] &quot;Leelawadee UI Semilight&quot;
+## 
+## $`Lucida Bright`
+## [1] &quot;Lucida Bright&quot;
+## 
+## $`Lucida Calligraphy`
+## [1] &quot;Lucida Calligraphy&quot;
+## 
+## $`Lucida Console`
+## [1] &quot;Lucida Console&quot;
+## 
+## $`Lucida Fax`
+## [1] &quot;Lucida Fax&quot;
+## 
+## $`Lucida Handwriting`
+## [1] &quot;Lucida Handwriting&quot;
+## 
+## $`Lucida Sans`
+## [1] &quot;Lucida Sans&quot;
+## 
+## $`Lucida Sans Typewriter`
+## [1] &quot;Lucida Sans Typewriter&quot;
+## 
+## $`Lucida Sans Unicode`
+## [1] &quot;Lucida Sans Unicode&quot;
+## 
+## $Magneto
+## [1] &quot;Magneto&quot;
+## 
+## $`Maiandra GD`
+## [1] &quot;Maiandra GD&quot;
+## 
+## $`Malgun Gothic`
+## [1] &quot;Malgun Gothic&quot;
+## 
+## $`Malgun Gothic Semilight`
+## [1] &quot;Malgun Gothic Semilight&quot;
+## 
+## $Marlett
+## [1] &quot;Marlett&quot;
+## 
+## $`Matura MT Script Capitals`
+## [1] &quot;Matura MT Script Capitals&quot;
+## 
+## $`Microsoft Himalaya`
+## [1] &quot;Microsoft Himalaya&quot;
+## 
+## $`Microsoft Yi Baiti`
+## [1] &quot;Microsoft Yi Baiti&quot;
+## 
+## $`Microsoft New Tai Lue`
+## [1] &quot;Microsoft New Tai Lue&quot;
+## 
+## $`Microsoft PhagsPa`
+## [1] &quot;Microsoft PhagsPa&quot;
+## 
+## $`Microsoft Sans Serif`
+## [1] &quot;Microsoft Sans Serif&quot;
+## 
+## $`Microsoft Tai Le`
+## [1] &quot;Microsoft Tai Le&quot;
+## 
+## $`Microsoft Uighur`
+## [1] &quot;Microsoft Uighur&quot;
+## 
+## $Mistral
+## [1] &quot;Mistral&quot;
+## 
+## $`Modern No. 20`
+## [1] &quot;Modern No. 20&quot;
+## 
+## $`Mongolian Baiti`
+## [1] &quot;Mongolian Baiti&quot;
+## 
+## $`Monotype Corsiva`
+## [1] &quot;Monotype Corsiva&quot;
+## 
+## $`MS Outlook`
+## [1] &quot;MS Outlook&quot;
+## 
+## $`MS Reference Sans Serif`
+## [1] &quot;MS Reference Sans Serif&quot;
+## 
+## $`MS Reference Specialty`
+## [1] &quot;MS Reference Specialty&quot;
+## 
+## $`MT Extra`
+## [1] &quot;MT Extra&quot;
+## 
+## $`MV Boli`
+## [1] &quot;MV Boli&quot;
+## 
+## $`Myanmar Text`
+## [1] &quot;Myanmar Text&quot;
+## 
+## $`Niagara Engraved`
+## [1] &quot;Niagara Engraved&quot;
+## 
+## $`Niagara Solid`
+## [1] &quot;Niagara Solid&quot;
+## 
+## $`Nirmala UI`
+## [1] &quot;Nirmala UI&quot;
+## 
+## $`Nirmala UI Semilight`
+## [1] &quot;Nirmala UI Semilight&quot;
+## 
+## $`OCR A Extended`
+## [1] &quot;OCR A Extended&quot;
+## 
+## $`Old English Text MT`
+## [1] &quot;Old English Text MT&quot;
+## 
+## $Onyx
+## [1] &quot;Onyx&quot;
+## 
+## $`Palace Script MT`
+## [1] &quot;Palace Script MT&quot;
+## 
+## $`Palatino Linotype`
+## [1] &quot;Palatino Linotype&quot;
+## 
+## $Papyrus
+## [1] &quot;Papyrus&quot;
+## 
+## $Parchment
+## [1] &quot;Parchment&quot;
+## 
+## $Perpetua
+## [1] &quot;Perpetua&quot;
+## 
+## $`Perpetua Titling MT`
+## [1] &quot;Perpetua Titling MT&quot;
+## 
+## $Playbill
+## [1] &quot;Playbill&quot;
+## 
+## $`Poor Richard`
+## [1] &quot;Poor Richard&quot;
+## 
+## $Pristina
+## [1] &quot;Pristina&quot;
+## 
+## $`Rage Italic`
+## [1] &quot;Rage Italic&quot;
+## 
+## $Ravie
+## [1] &quot;Ravie&quot;
+## 
+## $Rockwell
+## [1] &quot;Rockwell&quot;
+## 
+## $`Rockwell Condensed`
+## [1] &quot;Rockwell Condensed&quot;
+## 
+## $`Rockwell Extra Bold`
+## [1] &quot;Rockwell Extra Bold&quot;
+## 
+## $`Script MT Bold`
+## [1] &quot;Script MT Bold&quot;
+## 
+## $`Segoe MDL2 Assets`
+## [1] &quot;Segoe MDL2 Assets&quot;
+## 
+## $`Segoe Print`
+## [1] &quot;Segoe Print&quot;
+## 
+## $`Segoe Script`
+## [1] &quot;Segoe Script&quot;
+## 
+## $`Segoe UI`
+## [1] &quot;Segoe UI&quot;
+## 
+## $`Segoe UI Light`
+## [1] &quot;Segoe UI Light&quot;
+## 
+## $`Segoe UI Semibold`
+## [1] &quot;Segoe UI Semibold&quot;
+## 
+## $`Segoe UI Semilight`
+## [1] &quot;Segoe UI Semilight&quot;
+## 
+## $`Segoe UI Black`
+## [1] &quot;Segoe UI Black&quot;
+## 
+## $`Segoe UI Emoji`
+## [1] &quot;Segoe UI Emoji&quot;
+## 
+## $`Segoe UI Historic`
+## [1] &quot;Segoe UI Historic&quot;
+## 
+## $`Segoe UI Symbol`
+## [1] &quot;Segoe UI Symbol&quot;
+## 
+## $`Showcard Gothic`
+## [1] &quot;Showcard Gothic&quot;
+## 
+## $`SimSun-ExtB`
+## [1] &quot;SimSun-ExtB&quot;
+## 
+## $`Snap ITC`
+## [1] &quot;Snap ITC&quot;
+## 
+## $Stencil
+## [1] &quot;Stencil&quot;
+## 
+## $Sylfaen
+## [1] &quot;Sylfaen&quot;
+## 
+## $Symbol
+## [1] &quot;Symbol&quot;
+## 
+## $Tahoma
+## [1] &quot;Tahoma&quot;
+## 
+## $`Tempus Sans ITC`
+## [1] &quot;Tempus Sans ITC&quot;
+## 
+## $`Times New Roman`
+## [1] &quot;Times New Roman&quot;
+## 
+## $`Trebuchet MS`
+## [1] &quot;Trebuchet MS&quot;
+## 
+## $`Tw Cen MT`
+## [1] &quot;Tw Cen MT&quot;
+## 
+## $`Tw Cen MT Condensed`
+## [1] &quot;Tw Cen MT Condensed&quot;
+## 
+## $`Tw Cen MT Condensed Extra Bold`
+## [1] &quot;Tw Cen MT Condensed Extra Bold&quot;
+## 
+## $Verdana
+## [1] &quot;Verdana&quot;
+## 
+## $`Viner Hand ITC`
+## [1] &quot;Viner Hand ITC&quot;
+## 
+## $Vivaldi
+## [1] &quot;Vivaldi&quot;
+## 
+## $`Vladimir Script`
+## [1] &quot;Vladimir Script&quot;
+## 
+## $Webdings
+## [1] &quot;Webdings&quot;
+## 
+## $Wingdings
+## [1] &quot;Wingdings&quot;
+## 
+## $`Wingdings 2`
+## [1] &quot;Wingdings 2&quot;
+## 
+## $`Wingdings 3`
+## [1] &quot;Wingdings 3&quot;
+## 
+## $ZWAdobeF
+## [1] &quot;ZWAdobeF&quot;</code></pre>
 <p>This isn’t exactly a huge array of options. But we can use the extrafont package to have access to some more:</p>
 <pre class="r"><code># install this dependency before loading the package
 #remotes::install_version(&quot;Rttf2pt1&quot;, version = &quot;1.3.8&quot;)
 
-library(extrafont)</code></pre>
-<pre><code>## Registering fonts with R</code></pre>
-<pre class="r"><code># need to import and load the fonts - this will take a few minutes but only has to be done once
+library(extrafont)
+
+# need to import and load the fonts - this will take a few minutes but only has to be done once
 #font_import()
 #loadfonts(device=&quot;win&quot;)
 
