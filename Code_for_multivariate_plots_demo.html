@@ -401,42 +401,48 @@ library(vegan)
 desord = metaMDS(desserts[,-1])</code></pre>
 <pre><code>## Run 0 stress 0.1036346 
 ## Run 1 stress 0.1036346 
-## ... Procrustes: rmse 2.884991e-05  max resid 5.585834e-05 
-## ... Similar to previous best
-## Run 2 stress 0.1560746 
-## Run 3 stress 0.168737 
-## Run 4 stress 0.1383341 
-## Run 5 stress 0.1318934 
-## Run 6 stress 0.1036346 
-## ... Procrustes: rmse 8.689654e-05  max resid 0.000174602 
-## ... Similar to previous best
-## Run 7 stress 0.1036346 
-## ... Procrustes: rmse 4.437795e-05  max resid 8.466864e-05 
-## ... Similar to previous best
-## Run 8 stress 0.1560745 
-## Run 9 stress 0.1036346 
-## ... Procrustes: rmse 7.420818e-05  max resid 0.0001487334 
-## ... Similar to previous best
-## Run 10 stress 0.1318933 
-## Run 11 stress 0.1193745 
-## Run 12 stress 0.1036346 
-## ... Procrustes: rmse 0.0001130615  max resid 0.0002285214 
-## ... Similar to previous best
-## Run 13 stress 0.1036346 
-## ... Procrustes: rmse 0.0001692802  max resid 0.0003424508 
-## ... Similar to previous best
-## Run 14 stress 0.1036346 
-## ... Procrustes: rmse 3.145362e-05  max resid 6.182468e-05 
-## ... Similar to previous best
-## Run 15 stress 0.1193745 
-## Run 16 stress 0.1383341 
-## Run 17 stress 0.1036346 
 ## ... New best solution
-## ... Procrustes: rmse 1.433697e-05  max resid 2.927028e-05 
+## ... Procrustes: rmse 4.085164e-05  max resid 8.140315e-05 
 ## ... Similar to previous best
-## Run 18 stress 0.1714369 
-## Run 19 stress 0.1193745 
-## Run 20 stress 0.1318933 
+## Run 2 stress 0.1599093 
+## Run 3 stress 0.1036346 
+## ... Procrustes: rmse 0.0001040236  max resid 0.0002102589 
+## ... Similar to previous best
+## Run 4 stress 0.1036346 
+## ... Procrustes: rmse 6.26304e-05  max resid 0.0001273578 
+## ... Similar to previous best
+## Run 5 stress 0.1036346 
+## ... Procrustes: rmse 0.0001871886  max resid 0.0003789553 
+## ... Similar to previous best
+## Run 6 stress 0.1036347 
+## ... Procrustes: rmse 0.0002310952  max resid 0.0004667943 
+## ... Similar to previous best
+## Run 7 stress 0.1383341 
+## Run 8 stress 0.1036346 
+## ... Procrustes: rmse 0.0001769635  max resid 0.0003583557 
+## ... Similar to previous best
+## Run 9 stress 0.1036346 
+## ... Procrustes: rmse 5.196876e-05  max resid 0.0001054897 
+## ... Similar to previous best
+## Run 10 stress 0.1560745 
+## Run 11 stress 0.1036346 
+## ... Procrustes: rmse 0.0001363177  max resid 0.000270398 
+## ... Similar to previous best
+## Run 12 stress 0.1193745 
+## Run 13 stress 0.1383341 
+## Run 14 stress 0.1036346 
+## ... Procrustes: rmse 0.0001285888  max resid 0.0002596032 
+## ... Similar to previous best
+## Run 15 stress 0.1714369 
+## Run 16 stress 0.1318933 
+## Run 17 stress 0.1193745 
+## Run 18 stress 0.1036346 
+## ... Procrustes: rmse 5.167786e-06  max resid 1.078766e-05 
+## ... Similar to previous best
+## Run 19 stress 0.1036346 
+## ... Procrustes: rmse 3.542631e-05  max resid 7.103771e-05 
+## ... Similar to previous best
+## Run 20 stress 0.2835505 
 ## *** Solution reached</code></pre>
 <p>Unfortunately, the basic vegan plotting function doesn’t make a particularly compelling plot:</p>
 <pre class="r"><code>plot(desord)</code></pre>
@@ -447,24 +453,24 @@ dessert_data = data.frame(NMDS1 = desord$points[,1], NMDS2= desord$points[,2],
                           dessert = desserts$dessert)
 
 head(dessert_data)</code></pre>
-<pre><code>##        NMDS1      NMDS2      dessert
-## 1 -0.4844730  0.1261160   pound_cake
-## 2  0.3606939 -0.1194202     pancakes
-## 3 -0.6083605  0.5136574     meringue
-## 4  0.7515598 -0.2514009 choux_pastry
-## 5 -0.0660244 -0.7494015          pie
-## 6  0.1041600  0.2649752      fritter</code></pre>
+<pre><code>##         NMDS1      NMDS2      dessert
+## 1 -0.48446152  0.1261693   pound_cake
+## 2  0.36063459 -0.1195091     pancakes
+## 3 -0.60830237  0.5137247     meringue
+## 4  0.75159066 -0.2512810 choux_pastry
+## 5 -0.06598086 -0.7494376          pie
+## 6  0.10417380  0.2649506      fritter</code></pre>
 <pre class="r"><code># create dataframe of ingredient information using the &#39;species&#39; scores 
 ingredient_data = as.data.frame(scores(desord, &quot;species&quot;))
 ingredient_data$ingredient = row.names(ingredient_data)
 
 head(ingredient_data)</code></pre>
 <pre><code>##             NMDS1      NMDS2 ingredient
-## flour  -0.2288702  0.1283849      flour
-## sugar  -1.1139185  0.4865343      sugar
-## eggs    0.3351825  0.3436044       eggs
-## fat    -0.2236765 -0.7130612        fat
-## liquid  0.4657765 -0.1422629     liquid</code></pre>
+## flour  -0.2288866  0.1283656      flour
+## sugar  -1.1138569  0.4866354      sugar
+## eggs    0.3352161  0.3436214       eggs
+## fat    -0.2236769 -0.7130290        fat
+## liquid  0.4657437 -0.1422910     liquid</code></pre>
 <p>Now we can make a plot:</p>
 <pre class="r"><code># First, let&#39;s visualize the desserts in 2-D space
 ggplot(dessert_data, aes(x=NMDS1, y=NMDS2))+
@@ -523,13 +529,13 @@ dessert_data = dessert_data %&gt;%
   mutate(emoji = map_chr(dessert_id2, ji))
 
 head(dessert_data)</code></pre>
-<pre><code>##        NMDS1      NMDS2      dessert dessert_id2            emoji
-## 1 -0.4844730  0.1261160   pound_cake    doughnut     &lt;U+0001F369&gt;
-## 2  0.3606939 -0.1194202     pancakes    pancakes     &lt;U+0001F95E&gt;
-## 3 -0.6083605  0.5136574     meringue       cloud &lt;U+2601&gt;&lt;U+FE0F&gt;
-## 4  0.7515598 -0.2514009 choux_pastry       bread     &lt;U+0001F35E&gt;
-## 5 -0.0660244 -0.7494015          pie         pie     &lt;U+0001F967&gt;
-## 6  0.1041600  0.2649752      fritter      hotdog     &lt;U+0001F32D&gt;</code></pre>
+<pre><code>##         NMDS1      NMDS2      dessert dessert_id2            emoji
+## 1 -0.48446152  0.1261693   pound_cake    doughnut     &lt;U+0001F369&gt;
+## 2  0.36063459 -0.1195091     pancakes    pancakes     &lt;U+0001F95E&gt;
+## 3 -0.60830237  0.5137247     meringue       cloud &lt;U+2601&gt;&lt;U+FE0F&gt;
+## 4  0.75159066 -0.2512810 choux_pastry       bread     &lt;U+0001F35E&gt;
+## 5 -0.06598086 -0.7494376          pie         pie     &lt;U+0001F967&gt;
+## 6  0.10417380  0.2649506      fritter      hotdog     &lt;U+0001F32D&gt;</code></pre>
 <pre class="r"><code>ggplot(dessert_data, aes(x = NMDS1, y = NMDS2))+
   geom_text(aes(label=emoji, col=emoji))+
   geom_text_repel(aes(label=dessert))+
@@ -569,11 +575,11 @@ dessert_data$picture[grep(&quot;muffin&quot;,dessert_data$dessert)] = &quot;baki
 <p>The last step that I’ll cover is adding the ingredient information to plot.</p>
 <pre class="r"><code>head(ingredient_data)</code></pre>
 <pre><code>##             NMDS1      NMDS2 ingredient
-## flour  -0.2288702  0.1283849      flour
-## sugar  -1.1139185  0.4865343      sugar
-## eggs    0.3351825  0.3436044       eggs
-## fat    -0.2236765 -0.7130612        fat
-## liquid  0.4657765 -0.1422629     liquid</code></pre>
+## flour  -0.2288866  0.1283656      flour
+## sugar  -1.1138569  0.4866354      sugar
+## eggs    0.3352161  0.3436214       eggs
+## fat    -0.2236769 -0.7130290        fat
+## liquid  0.4657437 -0.1422910     liquid</code></pre>
 <p>We can do this by simply adding another layer to the plot:</p>
 <pre class="r"><code>ggplot(dessert_data, aes(x=NMDS1, y=NMDS2))+
   geom_image(aes(image = picture),size=0.1)+
